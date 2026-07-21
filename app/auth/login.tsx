@@ -21,8 +21,8 @@ export default function LoginScreen() {
     const [password, setPassword] = useState("");
 
     const handleLogin = () => {
-        // TODO: Add Login API
-        // router.replace("/patient/home");
+        // TODO: Replace with real authentication (e.g. Supabase auth)
+        router.replace("../patient/home");
     };
 
     return (

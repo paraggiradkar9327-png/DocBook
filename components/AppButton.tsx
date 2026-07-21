@@ -4,7 +4,8 @@ import { Theme } from "../theme/Theme";
 
 type Props = {
     title: string;
-    onPress: () => void;
+    onPress?: () => void;
+    disabled?: boolean;
 };
 
 export default function AppButton({ title, onPress }: Props) {
