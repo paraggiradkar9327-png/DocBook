@@ -1,11 +1,11 @@
 import { StyleSheet } from "react-native";
+import { Theme } from "../theme/Theme";
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F7FAFC",
-    padding: 25,
-    justifyContent: "center",
+    backgroundColor: Theme.Colors.background,
+    paddingHorizontal: Theme.Spacing.lg,
   },
 
   logoContainer: {
@@ -169,4 +169,35 @@ export const styles = StyleSheet.create({
     fontWeight: "700",
     letterSpacing: 0.5,
   },
+  formContainer: {
+    width: "100%",
+    marginTop: 30,
+    marginBottom: 20,
+    gap: 12, // React Native 0.71+ supports gap
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingVertical: 30,
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 20,
+  },
+
+  terms: {
+    fontSize: 14,
+    color: "#64748B",
+    marginLeft: 10,
+    flex: 1,
+    lineHeight: 20,
+  },
+  login: {
+    color: "#2563EB",
+    fontSize: 15,
+    fontWeight: "700",
+    marginLeft: 5,
+  },
+
 });
