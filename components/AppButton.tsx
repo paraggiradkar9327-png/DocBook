@@ -1,17 +1,29 @@
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { Theme } from "../theme/Theme";
 
 type Props = {
     title: string;
-    onPress?: () => void;
+    onPress: () => void;
+    loading?: boolean;
     disabled?: boolean;
 };
 
-export default function AppButton({ title, onPress }: Props) {
+export default function AppButton({ title, onPress, loading, disabled }: Props) {
+    const isDisabled = disabled || loading;
+
     return (
-        <TouchableOpacity style={styles.button} onPress={onPress}>
-            <Text style={styles.text}>{title}</Text>
+        <TouchableOpacity
+            style={[styles.button, isDisabled && styles.buttonDisabled]}
+            onPress={onPress}
+            disabled={isDisabled}
+            activeOpacity={0.8}
+        >
+            {loading ? (
+                <ActivityIndicator color={Theme.Colors.white} />
+            ) : (
+                <Text style={styles.text}>{title}</Text>
+            )}
         </TouchableOpacity>
     );
 }
@@ -24,6 +36,10 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         ...Theme.Shadows.card,
+    },
+
+    buttonDisabled: {
+        opacity: 0.6,
     },
 
     text: {

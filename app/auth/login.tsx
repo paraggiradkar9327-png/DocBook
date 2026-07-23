@@ -7,22 +7,45 @@ import {
     View,
     Text,
     TouchableOpacity,
+    Alert,
 } from "react-native";
 import { router } from "expo-router";
 
 import AppLogo from "../../components/AppLogo";
 import AppInput from "../../components/AppInput";
 import AppButton from "../../components/AppButton";
+import { supabase } from "../../services/supabase";
 
 import { styles } from "../../styles/LoginStyles";
 
 export default function LoginScreen() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    const handleLogin = () => {
-        // TODO: Replace with real authentication (e.g. Supabase auth)
-        router.replace("../patient/home");
+    const handleLogin = async () => {
+        const trimmedEmail = email.trim();
+
+        if (!trimmedEmail || !password) {
+            Alert.alert("Missing information", "Please enter both email and password.");
+            return;
+        }
+
+        setLoading(true);
+
+        const { error } = await supabase.auth.signInWithPassword({
+            email: trimmedEmail,
+            password,
+        });
+
+        setLoading(false);
+
+        if (error) {
+            Alert.alert("Login failed", error.message);
+            return;
+        }
+
+        router.replace("/patient/home");
     };
 
     return (
@@ -53,6 +76,7 @@ export default function LoginScreen() {
                             autoCapitalize="none"
                             value={email}
                             onChangeText={setEmail}
+                            editable={!loading}
                         />
 
                         <Text style={styles.label}>Password</Text>
@@ -62,6 +86,7 @@ export default function LoginScreen() {
                             secureTextEntry
                             value={password}
                             onChangeText={setPassword}
+                            editable={!loading}
                         />
                     </View>
 
@@ -74,6 +99,7 @@ export default function LoginScreen() {
                     <AppButton
                         title="Login"
                         onPress={handleLogin}
+                        loading={loading}
                     />
 
                     <View style={styles.bottom}>
@@ -83,6 +109,7 @@ export default function LoginScreen() {
 
                         <TouchableOpacity
                             onPress={() => router.push("/auth/signup")}
+                            disabled={loading}
                         >
                             <Text style={styles.signup}>
                                 Sign Up

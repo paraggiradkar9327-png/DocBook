@@ -1,15 +1,39 @@
 import { useEffect } from "react";
 import { View, Text, StyleSheet, Image, ActivityIndicator } from "react-native";
 import { router } from "expo-router";
+import { supabase } from "../services/supabase";
+
+const MIN_SPLASH_MS = 1500;
 
 export default function SplashScreen() {
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            router.replace("/auth/login");
-        }, 3000);
+        let cancelled = false;
 
-        return () => clearTimeout(timer);
+        const decideRoute = async () => {
+            const start = Date.now();
+
+            const { data } = await supabase.auth.getSession();
+
+            const elapsed = Date.now() - start;
+            const remaining = Math.max(MIN_SPLASH_MS - elapsed, 0);
+
+            setTimeout(() => {
+                if (cancelled) return;
+
+                if (data.session) {
+                    router.replace("/patient/home");
+                } else {
+                    router.replace("/auth/login");
+                }
+            }, remaining);
+        };
+
+        decideRoute();
+
+        return () => {
+            cancelled = true;
+        };
     }, []);
 
     return (
